@@ -1,95 +1,50 @@
 # Exponential Decay PINN - Zero-Shot Learning
 
-This project implements a **Physics-Informed Neural Network (PINN)** to learn exponential decay behavior using the **zero-shot method** - training purely from physics constraints without any target data.
+This code trains a small physics-informed neural network (PINN) to solve the exponential decay equation
 
-## Problem Statement
+  dy/dt + λ y = 0,  y(0) = y0
 
-The PINN learns to solve the exponential decay ODE:
-```
-dy/dt + λy = 0
-y(0) = y₀
-```
+Purpose
+- Learn y(t) using only the physics. No labeled solution data is required.
 
-where:
-- `λ` is the decay rate
-- `y₀` is the initial condition
+Method 
+- I build a neural network that maps time `t` to a prediction `y(t)`.
+- I compute the derivative dy/dt using automatic differentiation and form a physics loss from the ODE residual dy/dt + λ y.
+- I also add a loss for the initial condition so the network starts at y(0) = y0.
+- The optimizer reduces the combined loss so the network learns a function that satisfies the ODE and the initial condition.
 
-## Zero-Shot Method
-
-Unlike traditional supervised learning, this PINN:
-- ❌ **No target data** is provided during training
-- ✅ **Only physics loss** is used (the ODE residual)
-- ✅ Learns by ensuring predictions satisfy the differential equation
-- ✅ Uses automatic differentiation to compute dy/dt
-
-## How It Works
-
-1. **Neural Network**: Takes time `t` as input, outputs `y(t)`
-2. **Physics Loss**: Computes `dy/dt + λy` using automatic differentiation - should be zero
-3. **Initial Condition Loss**: Ensures `y(0) = y₀`
-4. **Training**: Random collocation points are sampled; network adjusts weights to minimize physics residual
-
-## Installation
+How to run
+1. Install the requirements:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Usage
+2. Run the script:
 
-Run the complete demo:
 ```bash
 python exponential_decay_pinn.py
 ```
 
-This will:
-1. Initialize a PINN with random weights
-2. Train using only physics loss (10,000 epochs)
-3. Compare predictions with analytical solution
-4. Generate visualization plots
-5. Print accuracy metrics
+What the script does
+- Samples collocation points in time and trains the PINN to minimize the physics residual and the initial condition error.
+- Saves plots that compare the learned solution to the analytic solution y(t) = y0 * exp(-λ t).
 
-## Results
+Expected results
+- The training loss should drop and the learned curve should match the analytic solution for the chosen `λ` and `y0`.
 
-The PINN successfully learns exponential decay behavior without ever seeing target data! The network discovers the solution purely by satisfying the physics equations.
+Main parameters you can change
+- `decay_rate` (λ): how fast the solution decays.
+- `y0`: initial value at t = 0.
+- `t_max`: end time for training.
+- `n_collocation`: number of physics points sampled.
+- `epochs`: training iterations.
 
-**Expected output:**
-- Training loss converges to near-zero
-- Predictions closely match analytical solution: `y(t) = y₀ * exp(-λt)`
-- Visualization showing prediction accuracy
+Theory (brief)
+- Physics loss: L_physics = mean((dy/dt + λ y)^2). This pushes the network to satisfy the differential equation.
+- Initial condition loss: L_ic = (y(0) - y0)^2. This forces the network to match the starting value.
+- Total loss: L_total = L_physics + α * L_ic (α is a weight used in the code).
 
-## Key Features
+Notes
+- This method is useful when you know the governing equation but do not have labeled solution data. The network learns by enforcing the physics.
 
-- **Zero-shot learning**: No data labels required
-- **Automatic differentiation**: PyTorch computes derivatives automatically
-- **Physics-driven**: Network learns from fundamental equations
-- **Collocation points**: Random sampling ensures good coverage
-- **Visualization**: Comprehensive plots of predictions and losses
-
-## Parameters
-
-You can customize the PINN in `main()`:
-- `decay_rate`: Controls how fast the decay occurs (λ)
-- `y0`: Initial value at t=0
-- `t_max`: Maximum time for training domain
-- `n_collocation`: Number of physics evaluation points
-- `epochs`: Training iterations
-
-## Theory
-
-The physics loss is:
-```
-L_physics = mean((dy/dt + λy)²)
-```
-
-The initial condition loss is:
-```
-L_ic = (y(0) - y₀)²
-```
-
-Total loss:
-```
-L_total = L_physics + 10 * L_ic
-```
-
-The network learns by gradient descent to minimize this combined loss.
