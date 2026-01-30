@@ -69,14 +69,3 @@ python train_spm.py --phys_csv ../Week3/data_out/battery_phys_resampled200.csv
 
 ---
 
-## Project Summary
-
-| Task | Focus | Output |
-|------|-------|--------|
-| **Task 1** | Physics-informed learning | PINN solution to ODE |
-| **Task 2** | Electrochemical modeling | OCV polynomial + SPM |
-| **Week 3** | Machine learning SoH | Transformer (70% accuracy) |
-| **Week 4** | Physics-based SoH | Enhanced SPM + parameter fitting |
-
-All code is organized by task/week with clear README files, requirements.txt, and executable scripts. Ready for deployment and extension.
-
