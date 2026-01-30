@@ -1,0 +1,4 @@
+pybamm>=23.0
+numpy
+matplotlib
+scipy
