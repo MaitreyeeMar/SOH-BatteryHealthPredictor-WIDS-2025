@@ -54,7 +54,7 @@ python visualize.py --main_csv data_out/battery_main_binned20.csv --phys_csv dat
   - `Week4/train_spm.py`: Fits SPM parameters to physics dataset. Extracts R0 from V-I data via least squares, builds OCV profile from 10 SoC bins, and demonstrates voltage simulation.
   - `Week4/requirements.txt`: Python dependencies.
 
-What it does:
+What it does
 - Loads the physics dataset from Week 3 (high-resolution 200-point cycles).
 - Fits ohmic resistance R0 and extracts OCV curve from measured voltage-current-SoC data.
 - Creates an SPM instance that can simulate discharge voltage curves with transient dynamics.
@@ -65,18 +65,5 @@ How to run:
 cd Week4
 pip install -r requirements.txt
 python train_spm.py --phys_csv ../Week3/data_out/battery_phys_resampled200.csv
-```
-
----
-
-## Project Summary
-
-| Task | Focus | Output |
-|------|-------|--------|
-| **Task 1** | Physics-informed learning | PINN solution to ODE |
-| **Task 2** | Electrochemical modeling | OCV polynomial + SPM |
-| **Week 3** | Machine learning SoH | Transformer (70% accuracy) |
-| **Week 4** | Physics-based SoH | Enhanced SPM + parameter fitting |
-
-All code is organized by task/week with clear README files, requirements.txt, and executable scripts. Ready for deployment and extension.
+``
 
